@@ -21,13 +21,19 @@ public class VeiculoRepository {
     private final static String UPT = "UPDATE veiculos SET nome = ?, cor = ?, ano = ?, modelo = ?, numero_chassi = ?, placa = ?, unicodono = ? WHERE id = ?";
     private final static String DEL = "DELETE FROM veiculos WHERE id = ?";
 
-    public static boolean salvar(Veiculo car)  {
+    public static boolean salvar( Veiculo car  )  {
         if (car == null) {
             throw new IllegalArgumentException("Error ao salvar os dados do carro!");
         }
 
         try (Connection conectar = ConexaoBancoDados.conexao() ) {
-            PreparedStatement preparar = conectar.prepareStatement(INS);
+
+            /*
+            * Adicionando o parâmetro Statement para poder obter os 'id's recentes, assim eu não perco o 'id' inseridos
+            * Antes de pensar grande e casos complexos, vamos apenas fazer um funcionar e focar nisso no momento
+            *
+            * */
+            PreparedStatement preparar = conectar.prepareStatement( INS, Statement.RETURN_GENERATED_KEYS );
 
             preparar.setString(1, car.getNome());
             preparar.setString(2, car.getCor());
@@ -39,7 +45,22 @@ public class VeiculoRepository {
 
             int linhas = preparar.executeUpdate();
 
-            return linhas > 0;
+            // Vou precisar recuperar esse 'id' criado
+
+            try ( ResultSet idGerado = preparar.getGeneratedKeys()) {
+                if( idGerado.next() ){
+                    car.setId( idGerado.getInt( 1 ) ); // Acessando a primeira coluna
+                    // É o id
+                }else{
+                    throw new RuntimeException( "Falha ao encontrar o novo id do veículo!");
+                }
+            } catch ( SQLException e){
+                throw  new RuntimeException( "Falha ao tentar puxar o id do veículo!" );
+
+            }
+
+
+            return linhas > 0; // Se a linha for maior que 0 deu certo! Retorno 'true'.
 
 
         }catch( SQLException e) {
@@ -96,7 +117,7 @@ public class VeiculoRepository {
         }
     }
 
-    public static List<Veiculo> pesquisarFiltro(String coluna, String valorDigitado, Utills.FiltroDono unicoDono, Integer offSet) {
+    public static List<Veiculo> pesquisarFiltro(String coluna, String valorDigitado, Utills.FiltroDono unicoDono, int offSet) {
         if (offSet < 0) {
             throw new RuntimeException("Pulo inválido!");
         }
@@ -145,7 +166,14 @@ public class VeiculoRepository {
                 if (ehTexto) {
                     p.setString(index++, valorDigitado + "%");
                 } else {
-                    p.setInt(index++, Integer.parseInt(valorDigitado));
+                    int valorDigitadoParser;
+                    try {
+                        valorDigitadoParser = Integer.parseInt(valorDigitado);
+                    }catch( NumberFormatException e ){
+                        throw new IllegalArgumentException( "Insira números inteiros para poder pesquisar por ano ou id" );
+                    }
+
+                    p.setInt(index++, valorDigitadoParser);
                 }
             }
 
@@ -172,9 +200,7 @@ public class VeiculoRepository {
                     tempCar.setNumeroChassi(resultadoFiltro.getString("numero_chassi"));
                     tempCar.setPlaca(resultadoFiltro.getString("placa"));
                     tempCar.setUnicoDono(resultadoFiltro.getBoolean("unicodono"));
-                    car.add(tempCar);
-                    /*Se ocorrer um BufferOverFlow aqui é erro do desenvolvedor.
-                    Talvez eu mesmo errei e ainda não encontrei erro, haha.*/
+                    car.add(tempCar); // Adicionando no ArrayList a cada interação
                 }
             }catch(SQLException e){
                 throw new RuntimeException("Falha interna: Erro ao executar pesquisa");

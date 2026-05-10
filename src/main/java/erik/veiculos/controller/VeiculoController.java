@@ -41,11 +41,13 @@ public class VeiculoController {
             sucesso = VeiculoRepository.update( carro );
         }else{
             try {
-                sucesso = VeiculoRepository.salvar(carro);
+                // Vou precisar puxar o ID do carro a parte, vou ter que alterar a assinatura de salvarArquivo
 
+                sucesso = VeiculoRepository.salvar( carro );
 
-                if (sucesso) {
-                    Utills.salvarArquivo(carro);
+                if ( sucesso ) {
+
+                    Utills.salvarArquivo( carro );
                 }
             }catch( IllegalArgumentException e ){
                 throw new RuntimeException( e.getMessage() );

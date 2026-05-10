@@ -12,7 +12,7 @@ public class Veiculo {
     private boolean unicoDono;
 
 
-    public Veiculo(){}
+    public Veiculo(){} // Nunca usei, hahaha
 
     public Veiculo(int id, String nome, String cor, int ano, String modelo, String numeroChassi, String placa, boolean unicoDono){
         this.id = id;

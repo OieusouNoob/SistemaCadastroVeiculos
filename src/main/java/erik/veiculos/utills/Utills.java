@@ -56,10 +56,15 @@ public class Utills {
     } //Sei que não é a melhor forma, mas funciona
 
     public static boolean salvarArquivo( Veiculo car ){
+
+        if ( car == null ){
+            throw new RuntimeException( "Erro! O carro não existe!" );
+        }
+
         try (java.io.PrintWriter escrever = new java.io.PrintWriter( new java.io.FileWriter("veiculo.txt", true) )){
             escrever.printf(
                     "Veículo (ID) %d%n Nome: %s%n Cor: %s%n Ano: %d%n Modelo: %s%n Chassi: %s%n Placa: %s%n Único Dono? %s%n-----------------------------------%n",
-                    car.getId(),
+                    car.getId(), // Bug corrigido! Antes puxava do car o 'id', mas car nunca possui o seu próprio ‘id’, infelizmente tive que extrai-lo a parte
                     car.getNome(),
                     car.getCor(),
                     car.getAno(),

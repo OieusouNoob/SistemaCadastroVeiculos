@@ -144,8 +144,8 @@ public class Pesquisar  {
         * Fiz uns testes e notei que quando estava em tela cheia a tabela ficava cortada como se fosse ainda
         * uma tela dividida em 1.5
         * */
-        VBox.setVgrow( tabelaVeiculo, Priority.ALWAYS );
-
+        VBox.setVgrow( tabelaVeiculo, Priority.ALWAYS ); // Corrigido o problema da tela pela metade
+        // Esta linha acima faz um alinhamento em vertical segundo o dimensionamento da tela
         tabelaVeiculo.getColumns().addAll(
                 colunaId,
                 colunaNome,
@@ -188,14 +188,18 @@ public class Pesquisar  {
 
         btnBuscar.setOnAction( buscar -> {
 
-            if( campoBusca.getText().isEmpty() ){
+            if( campoBusca.getText().isEmpty() ){ // Uma busca com algum texto recebido + o tipo de busca ( id, nome, ..., placa )
 
                 if( caixaSuspensaUnicoDono.getValue() != Utills.FiltroDono.AMBOS ) {
                     dadosTable.clear();
-                    Pair<String, String> selecionado = caixaSuspensaFiltro.getValue();
+                    Pair<String, String> selecionado = caixaSuspensaFiltro.getValue(); // Caixa de escolha do tipo de pesquisa
                     dadosTable.addAll(VeiculoController.buscarComFiltro( selecionado.getValue(), null, caixaSuspensaUnicoDono.getValue(), offSet) );
                     return;
                 }else{
+                    // Se a pessoa só clicou no botão buscar, apenas atualizamos a tabela, no caso, limpamos ela e a colocamos de novo.
+
+                    // ... Pensando melhor, acho que isso vai fazer instâncias desnecessárias...
+                    // Como eu posso resolver esse caso de pesquisa sem nada selecionado? .... vou pensar a respeito ainda.
                     dadosTable.clear();
                     //A busca por todos, por padrão joga no começo, então aqui o offSet é desnecessário, pode ser 0 direto
                     dadosTable.addAll( VeiculoController.buscarTodos( 0 ));
@@ -205,9 +209,9 @@ public class Pesquisar  {
             }
 
             Pair<String, String> selecionado = caixaSuspensaFiltro.getValue();
+            // Esse If abaixo é apenas par ao caso de ser uma pesquisa com algum valor selecionado na ComboBox
+            // Por exemplo, o utilizador quer pesquisar pelos nomes e não digitou nada no campo de busca, ele vai cair aqui.
             if ( selecionado != null ){
-
-
 
                 try {
                     List<Veiculo> filtrados = VeiculoController.buscarComFiltro(selecionado.getValue(), campoBusca.getText(), caixaSuspensaUnicoDono.getValue(), offSet);
@@ -256,7 +260,7 @@ public class Pesquisar  {
                 try{
                     telaPrincipal.setCenter(  new Salvar().getFormularioSalvar( telaPrincipal, null ) );
                     offSet = 0;
-                    // Zeramos o offSet para que todas vezes que atualizamos a tela, ela não de erros como
+                    // Começamos do 0 com o offSet para que todas vezes que atualizamos a tela, ela não de erros como
                     // botões ativos estando no limite já permitindo o utilizador clicar, não vai atualizar, mas vai mostrar que é possível clicar
                     atualizarTabela( dadosTable );
                 }catch (RuntimeException e){
