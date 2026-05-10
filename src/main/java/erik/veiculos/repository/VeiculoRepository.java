@@ -29,10 +29,10 @@ public class VeiculoRepository {
         try (Connection conectar = ConexaoBancoDados.conexao() ) {
 
             /*
-            * Adicionando o parâmetro Statement para poder obter os 'id's recentes, assim eu não perco o 'id' inseridos
-            * Antes de pensar grande e casos complexos, vamos apenas fazer um funcionar e focar nisso no momento
-            *
-            * */
+             * Adicionando o parâmetro Statement para poder obter os 'id's recentes, assim eu não perco o 'id' inseridos
+             * Antes de pensar grande e casos complexos, vamos apenas fazer um funcionar e focar nisso no momento
+             *
+             * */
             PreparedStatement preparar = conectar.prepareStatement( INS, Statement.RETURN_GENERATED_KEYS );
 
             preparar.setString(1, car.getNome());
@@ -145,7 +145,7 @@ public class VeiculoRepository {
             }
 
             if( coluna.equals( "ano" ) ) {
-               tipoSelect.append("ORDER BY ano ASC LIMIT 15 OFFSET ?");
+                tipoSelect.append("ORDER BY ano ASC LIMIT 15 OFFSET ?");
 
             }else {
                 tipoSelect.append("ORDER BY id ASC LIMIT 15 OFFSET ?");
@@ -153,12 +153,10 @@ public class VeiculoRepository {
             }
 
             PreparedStatement p;
-            try{
-                p = con.prepareStatement( tipoSelect.toString() );
 
-            }catch( NullPointerException e){
-                throw new RuntimeException("Falha interna: Erro ao tentar montar uma pesquisa!");
-            }
+            p = con.prepareStatement( tipoSelect.toString() );
+
+
 
             int index = 1; //Antes eu fazia tudo na mão, usando uma variável como contadora foi bem mais simples
 
@@ -241,7 +239,7 @@ public class VeiculoRepository {
     }
 
     public static boolean delete( int id ){
-       
+
         if( id <= 0){ // Nunca se sabe o que se passa na mente de um progamador(a) de madrugada
             throw new RuntimeException("Falha interna: Erro ao tentar excluir um veículo");
         }

@@ -87,8 +87,8 @@ public class Pesquisar  {
                 if( filtroDono == Utills.FiltroDono.NAO) return "Não";
                 return "Ambos";
                 /*Essas linhas acima é para exibir o texto que o utilizador vai clicar,
-                * para ele vai aparecer apenas "Sim", "Não" e "Ambos".
-                * Para o backend da aplicação vai ser o próprio filtro*/
+                 * para ele vai aparecer apenas "Sim", "Não" e "Ambos".
+                 * Para o backend da aplicação vai ser o próprio filtro*/
             }
 
             @Override
@@ -141,9 +141,9 @@ public class Pesquisar  {
 
         //Para evitar erros de layout, por exemplo...
         /*
-        * Fiz uns testes e notei que quando estava em tela cheia a tabela ficava cortada como se fosse ainda
-        * uma tela dividida em 1.5
-        * */
+         * Fiz uns testes e notei que quando estava em tela cheia a tabela ficava cortada como se fosse ainda
+         * uma tela dividida em 1.5
+         * */
         VBox.setVgrow( tabelaVeiculo, Priority.ALWAYS ); // Corrigido o problema da tela pela metade
         // Esta linha acima faz um alinhamento em vertical segundo o dimensionamento da tela
         tabelaVeiculo.getColumns().addAll(
@@ -155,11 +155,15 @@ public class Pesquisar  {
                 colunaChassi,
                 colunaPlaca,
                 colunaUnicoDono
-            );
-
+        );
 
         tabelaVeiculo.setColumnResizePolicy( TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS );
 
+        // ObservableList foi escolhida porque enquanto eu pesquisava, perguntava e lia respostas ele pareceu ser melhor
+        // para resolver o meu problema em algumas coisas. Como o caso .setItems()
+
+        // Na documentação do JavaFX foi usado um ArrayList, mas aqui eu senti a necessidade de algo diferente
+        // Por isso foi escolhido a ObservableList, além de que a suas própriedades interessavam-me, queria aprender como usar, haha.
         ObservableList< Veiculo > dadosTable = FXCollections.observableArrayList( );
 
         tabelaVeiculo.setItems( dadosTable );
@@ -201,8 +205,9 @@ public class Pesquisar  {
                     // ... Pensando melhor, acho que isso vai fazer instâncias desnecessárias...
                     // Como eu posso resolver esse caso de pesquisa sem nada selecionado? .... vou pensar a respeito ainda.
                     dadosTable.clear();
-                    //A busca por todos, por padrão joga no começo, então aqui o offSet é desnecessário, pode ser 0 direto
-                    dadosTable.addAll( VeiculoController.buscarTodos( 0 ));
+                    offSet = 0;
+                    dadosTable.addAll( VeiculoController.buscarTodos( offSet ));
+                    btnAnterior.setDisable( true );
                     return;
                 }
 
@@ -238,34 +243,34 @@ public class Pesquisar  {
         });
 
         btnExcluir.setOnAction( excluir -> {
-           Veiculo car = tabelaVeiculo.getSelectionModel().getSelectedItem();
+            Veiculo car = tabelaVeiculo.getSelectionModel().getSelectedItem(); // Recebendo o car selecionado (endereço dele na memória, já que os objetos em java são apenas referências - ponteiros)
 
-           if( JavaFXUI.AlertaSimNao("Excluir Veículo", "Tem certeza que deseja excluir este veículo? Esta operação não poderá ser desfeita!" ) ){
-               try{
-                   boolean resultado = VeiculoController.excluirVeiculo( car.getId( ) );
+            if( JavaFXUI.AlertaSimNao("Excluir Veículo", "Tem certeza que deseja excluir este veículo? Esta operação não poderá ser desfeita!" ) ){
+                try{
+                    boolean resultado = VeiculoController.excluirVeiculo( car.getId( ) );
 
-                   if( resultado ) {
-                       JavaFXUI.Alertas(Alert.AlertType.INFORMATION, "Sucesso", "Veículo excluído com sucesso!");
-                       dadosTable.remove(car);
-                   }
+                    if( resultado ) {
+                        JavaFXUI.Alertas(Alert.AlertType.INFORMATION, "Sucesso", "Veículo excluído com sucesso!");
+                        dadosTable.remove(car); // Passando o objeto para que com toda a certeza o endereço do objeto seja igual ao que eu preciso apagar no momento.
+                    }
 
-               }catch(RuntimeException e){
-                   JavaFXUI.Alertas( Alert.AlertType.ERROR, "Error", e.getMessage() );
-               }
-           }
+                }catch(RuntimeException e){
+                    JavaFXUI.Alertas( Alert.AlertType.ERROR, "Error", e.getMessage() );
+                }
+            }
 
         });
 
         btnSalvarNovo.setOnAction(salvar -> {
-                try{
-                    telaPrincipal.setCenter(  new Salvar().getFormularioSalvar( telaPrincipal, null ) );
-                    offSet = 0;
-                    // Começamos do 0 com o offSet para que todas vezes que atualizamos a tela, ela não de erros como
-                    // botões ativos estando no limite já permitindo o utilizador clicar, não vai atualizar, mas vai mostrar que é possível clicar
-                    atualizarTabela( dadosTable );
-                }catch (RuntimeException e){
-                    JavaFXUI.Alertas( Alert.AlertType.ERROR, "Falha na Tela", e.getMessage() );
-                }
+            try{
+                telaPrincipal.setCenter(  new Salvar().getFormularioSalvar( telaPrincipal, null ) );
+                offSet = 0;
+                // Começamos do 0 com o offSet para que todas vezes que atualizamos a tela, ela não de erros como
+                // botões ativos estando no limite já permitindo o utilizador clicar, não vai atualizar, mas vai mostrar que é possível clicar
+                atualizarTabela( dadosTable );
+            }catch (RuntimeException e){
+                JavaFXUI.Alertas( Alert.AlertType.ERROR, "Falha na Tela", e.getMessage() );
+            }
 
         });
 

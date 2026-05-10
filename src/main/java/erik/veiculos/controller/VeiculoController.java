@@ -4,7 +4,6 @@ import erik.veiculos.models.Veiculo;
 import erik.veiculos.repository.VeiculoRepository;
 import erik.veiculos.utills.Utills;
 
-
 import java.util.List;
 
 public class VeiculoController {
@@ -50,7 +49,7 @@ public class VeiculoController {
                     Utills.salvarArquivo( carro );
                 }
             }catch( IllegalArgumentException e ){
-                throw new RuntimeException( e.getMessage() );
+                throw new RuntimeException( e.getMessage(), e );
             }
         }
         return sucesso;
