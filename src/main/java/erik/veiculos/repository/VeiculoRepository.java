@@ -1,4 +1,4 @@
-package erik.veiculos.models.repository;
+package erik.veiculos.repository;
 
 import erik.veiculos.models.Veiculo;
 import erik.veiculos.utills.Utills;

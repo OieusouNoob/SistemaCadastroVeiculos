@@ -1,7 +1,7 @@
 package erik.veiculos.controller;
 
 import erik.veiculos.models.Veiculo;
-import erik.veiculos.models.repository.VeiculoRepository;
+import erik.veiculos.repository.VeiculoRepository;
 import erik.veiculos.utills.Utills;
 
 

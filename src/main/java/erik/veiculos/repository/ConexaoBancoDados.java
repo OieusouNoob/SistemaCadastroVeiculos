@@ -1,4 +1,4 @@
-package erik.veiculos.models.repository;
+package erik.veiculos.repository;
 
 import java.sql.SQLException;
 import java.sql.Connection;
