@@ -12,7 +12,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 
-import javafx.scene.control.*;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TableCell;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
@@ -54,6 +61,7 @@ public class Pesquisar  {
 
     private int offSet = 0;
 
+
     public Pesquisar(){
 
         colunaId.setCellValueFactory( new PropertyValueFactory<>( "id" ) );
@@ -73,16 +81,17 @@ public class Pesquisar  {
         btnProximo = new Button("Próximo");
 
         campoBusca = new TextField();
-        JavaFXUI.setlimitChars( campoBusca, 20 );
+        JavaFXUI.setLimitChars( campoBusca, 20 );
         campoBusca.setPromptText("Pesquise algo");
 
         //Criamos uma caixa suspensa para o utilizador escolher se é único dono
         caixaSuspensaUnicoDono.getItems().addAll( Utills.FiltroDono.values() );
 
-        caixaSuspensaUnicoDono.setConverter(new StringConverter<Utills.FiltroDono>() {
+        caixaSuspensaUnicoDono.setConverter(new StringConverter<>() {
             @Override
             public String toString(Utills.FiltroDono filtroDono) {
-                if( filtroDono == null ) return "";
+                // Esse if abaixo é desnecessário, se não 'Sim' nem 'Não' eu caio em 'Ambos' da mesma forma
+                //if( filtroDono == null ) return "";
                 if( filtroDono == Utills.FiltroDono.SIM ) return "Sim";
                 if( filtroDono == Utills.FiltroDono.NAO) return "Não";
                 return "Ambos";
@@ -90,10 +99,44 @@ public class Pesquisar  {
                  * para ele vai aparecer apenas "Sim", "Não" e "Ambos".
                  * Para o backend da aplicação vai ser o próprio filtro*/
             }
+            /*
+            * Esse trecho acima funciona assim:
+            * Ao declararmos uma ENUM em Java ela também se torna um objeto, mas um objeto CONSTANTE
+            * Esta última parte é uma boa para que eu possa descobrir qual foi a opção que a pessoa selecionou
+            * porque se eu tenho três opções constantes sempre vou ter um final previsível para lidar.
+            * Isso facilita bastante o controle de fluxo de dados aqui na View
+            *
+            * */
 
             @Override
             public Utills.FiltroDono fromString(String s) {
                 return null;
+            }
+        });
+
+        // Enquanto realiza algumas pesquisas e perguntas eu fiquei indignado com que aparecia apenas o 'true' ou 'false'
+        /*
+        * Quero que apareça 'Sim' e 'Não'.
+        *
+        * E com esta indignação este trecho abaixo foi criado
+        * */
+
+        /*
+        * Este trecho apenas descobre o que estar armazenado na coluna unicoDono de Veículo e exibi 'Sim' ou 'Não'
+        *  Contudo, quem está fazendo isso é a própria coluna, antes eu pensava que era responsabilidade da
+        *  TableView, mas, aparentemente a própria coluna tem que saber sobre si mesma, realmente tudo é um objeto.
+        *   */
+        colunaUnicoDono.setCellFactory( colunaDono -> new TableCell<>(){
+            @Override
+            protected void updateItem( Boolean item, boolean empty ){// Item é o dado que precisamos, empty é a flag
+                super.updateItem( item, empty ); // Chamada a classe mãe/pai para descobrir se tem o objeto na memória
+                // Se tiver item será diferente de null, e se empty for true é porque acabou a nossa lista de objetos
+                if( empty || item == null ){ // Se empty tem algo true ou o item é igual a null...
+                    // Não colocamos nada na tabela!
+                    setText( null );
+                }else{ // Ainda tem algo em item e empty é false! No caso não está vazio.
+                    setText( item ? "Sim" : "Não" );
+                }
             }
         });
         caixaSuspensaUnicoDono.getSelectionModel().selectFirst(); //Deixamos o primeiro selecionado por padrão
@@ -105,21 +148,22 @@ public class Pesquisar  {
     private void atualizarTabela(ObservableList<Veiculo> dadosTable){
 
         Pair<String, String> selecionado = caixaSuspensaFiltro.getValue();
-
-
         List<Veiculo> car;
-        if (offSet >= 0 && campoBusca.getText().isEmpty() ) {
-            car = VeiculoController.buscarTodos( offSet );
 
-        }else{
-            car = VeiculoController.buscarComFiltro(selecionado.getValue(), campoBusca.getText(), caixaSuspensaUnicoDono.getValue(), offSet );
+        //Toda busca é uma busca filtrada, então não faz sentido a não ser para o começo o método buscarGeral!
+        if (offSet >= 0 && campoBusca.getText().isEmpty()) {
+            // Se for passado 'null' como segundo parâmetro vai ser entendido que é uma busca sem texto, apenas pela seleção do 'id', 'nome', '...' etc.
+            car = VeiculoController.buscarComFiltro( selecionado.getValue(), null, caixaSuspensaUnicoDono.getValue(), offSet );
+
+        } else {
+            car = VeiculoController.buscarComFiltro( selecionado.getValue(), campoBusca.getText(), caixaSuspensaUnicoDono.getValue(), offSet );
+
         }
+        btnProximo.setDisable( car.size() < 15 ); // Verdade? Desabilita!
+        btnAnterior.setDisable( offSet <= 0 ); //Menor por precaução
 
         dadosTable.clear(  );
         dadosTable.addAll( car );
-
-        btnProximo.setDisable( car.size() < 15 ); // Verdade? Desabilita!
-        btnAnterior.setDisable( offSet <= 0); //Menor por precaução
     }
 
     public Pane telaPesquisar( BorderPane telaPrincipal ) {
@@ -138,6 +182,7 @@ public class Pesquisar  {
         barraBusca.getChildren().addAll( campoBusca, btnBuscar, caixaSuspensaFiltro , textDono , caixaSuspensaUnicoDono );
 
         TableView<Veiculo> tabelaVeiculo = new TableView<>();
+        tabelaVeiculo.setFixedCellSize( 40.0 ); // Altura das linhas - para evitar ‘bugs’ visuais
 
         //Para evitar erros de layout, por exemplo...
         /*
@@ -163,12 +208,12 @@ public class Pesquisar  {
         // para resolver o meu problema em algumas coisas. Como o caso .setItems()
 
         // Na documentação do JavaFX foi usado um ArrayList, mas aqui eu senti a necessidade de algo diferente
-        // Por isso foi escolhido a ObservableList, além de que a suas própriedades interessavam-me, queria aprender como usar, haha.
+        // Por isso foi escolhido a ObservableList, queria aprender como usar, haha. No fim é só um array mais lento, haha.
         ObservableList< Veiculo > dadosTable = FXCollections.observableArrayList( );
 
         tabelaVeiculo.setItems( dadosTable );
 
-        List<Veiculo> carTemp = VeiculoController.buscarTodos( 0 );
+        List<Veiculo> carTemp = VeiculoController.buscarTodos( 0 ); // Busca inicial para mostrar todos!
 
         if( carTemp.isEmpty() ) {
 
@@ -188,55 +233,22 @@ public class Pesquisar  {
         btnAnterior.setDisable( offSet <= 0 );
         //Vamos desabilitar o botão de 'voltar' caso o utilizador tenha apenas, ou esteja, na primeira página
 
-
-
         btnBuscar.setOnAction( buscar -> {
-
-            if( campoBusca.getText().isEmpty() ){ // Uma busca com algum texto recebido + o tipo de busca ( id, nome, ..., placa )
-
-                if( caixaSuspensaUnicoDono.getValue() != Utills.FiltroDono.AMBOS ) {
-                    dadosTable.clear();
-                    Pair<String, String> selecionado = caixaSuspensaFiltro.getValue(); // Caixa de escolha do tipo de pesquisa
-                    dadosTable.addAll(VeiculoController.buscarComFiltro( selecionado.getValue(), null, caixaSuspensaUnicoDono.getValue(), offSet) );
-                    return;
-                }else{
-                    // Se a pessoa só clicou no botão buscar, apenas atualizamos a tabela, no caso, limpamos ela e a colocamos de novo.
-
-                    // ... Pensando melhor, acho que isso vai fazer instâncias desnecessárias...
-                    // Como eu posso resolver esse caso de pesquisa sem nada selecionado? .... vou pensar a respeito ainda.
-                    dadosTable.clear();
-                    offSet = 0;
-                    dadosTable.addAll( VeiculoController.buscarTodos( offSet ));
-                    btnAnterior.setDisable( true );
-                    return;
-                }
-
-            }
-
-            Pair<String, String> selecionado = caixaSuspensaFiltro.getValue();
-            // Esse If abaixo é apenas par ao caso de ser uma pesquisa com algum valor selecionado na ComboBox
-            // Por exemplo, o utilizador quer pesquisar pelos nomes e não digitou nada no campo de busca, ele vai cair aqui.
-            if ( selecionado != null ){
-
-                try {
-                    List<Veiculo> filtrados = VeiculoController.buscarComFiltro(selecionado.getValue(), campoBusca.getText(), caixaSuspensaUnicoDono.getValue(), offSet);
-                    if( !filtrados.isEmpty()){
-
-                        dadosTable.clear();
-                        dadosTable.addAll( filtrados );
-
-                    }
-                }catch( IllegalArgumentException e){
-                    JavaFXUI.Alertas( Alert.AlertType.ERROR, "Falha ao Pesquisar", e.getMessage() );
-                }catch ( RuntimeException e){
-                    JavaFXUI.Alertas( Alert.AlertType.ERROR, "Falha interna", e.getMessage() );
-                }
-
+            /*
+            * Notei que criei o método para atualizar a tabela, mas nunca é usado onde deveria! Então vamos refatorar essa reação do 'buscar'
+            *                      */
+            // Toda nova busca vai resetar o 'offSet' para 0.
+            offSet = 0;
+            try {
+                atualizarTabela(dadosTable);
+            }catch ( IllegalArgumentException e ){
+                JavaFXUI.Alertas( Alert.AlertType.ERROR, "Busca Inválida!", e.getMessage() );
+            }catch( RuntimeException e ){
+                JavaFXUI.Alertas( Alert.AlertType.ERROR, "Falha Interna", e.getMessage() );
             }
         });
 
         btnAlterar.setOnAction( alterar -> {
-
             Veiculo car = tabelaVeiculo.getSelectionModel().getSelectedItem();
             telaPrincipal.setCenter( new Salvar().getFormularioSalvar( telaPrincipal, car ) );
 
@@ -252,6 +264,7 @@ public class Pesquisar  {
                     if( resultado ) {
                         JavaFXUI.Alertas(Alert.AlertType.INFORMATION, "Sucesso", "Veículo excluído com sucesso!");
                         dadosTable.remove(car); // Passando o objeto para que com toda a certeza o endereço do objeto seja igual ao que eu preciso apagar no momento.
+                        // Um dos motivos de ter usado a ObserverList foi esse método de remoção! Apesar que no fim não muda tanto
                     }
 
                 }catch(RuntimeException e){
@@ -276,7 +289,13 @@ public class Pesquisar  {
 
         btnProximo.setOnAction(avancar -> {
             offSet += 15;
-            atualizarTabela( dadosTable );
+            try {
+                atualizarTabela(dadosTable);
+            }catch ( IllegalArgumentException e ){
+                JavaFXUI.Alertas( Alert.AlertType.ERROR, "Busca Inválida!", e.getMessage() );
+            }catch( RuntimeException e ){
+                JavaFXUI.Alertas( Alert.AlertType.ERROR, "Falha Interna", e.getMessage() );
+            }
 
         });
 
@@ -284,7 +303,13 @@ public class Pesquisar  {
 
             if( offSet >= 15){
                 offSet -= 15;
-                atualizarTabela( dadosTable );
+                try {
+                    atualizarTabela(dadosTable);
+                }catch ( IllegalArgumentException e ){
+                    JavaFXUI.Alertas( Alert.AlertType.ERROR, "Busca Inválida!", e.getMessage() );
+                }catch( RuntimeException e ){
+                    JavaFXUI.Alertas( Alert.AlertType.ERROR, "Falha Interna", e.getMessage() );
+                }
             }
         });
 

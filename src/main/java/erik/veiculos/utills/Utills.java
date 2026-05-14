@@ -14,9 +14,9 @@ public class Utills {
 
 
     public enum FiltroDono{
+        AMBOS,
         SIM,
         NAO,
-        AMBOS
     }
 
 

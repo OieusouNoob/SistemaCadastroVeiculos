@@ -36,22 +36,22 @@ public class Salvar {
     public Salvar(){
 
         campoNome = JavaFXUI.criarCampos("Nome");
-        JavaFXUI.setlimitChars( campoNome, 15 );
+        JavaFXUI.setLimitChars( campoNome, 15 );
 
         campoCor = JavaFXUI.criarCampos("Cor");
-        JavaFXUI.setlimitChars( campoCor, 15 );
+        JavaFXUI.setLimitChars( campoCor, 15 );
 
         campoAno = JavaFXUI.criarCampos("Ano");
-        JavaFXUI.setlimitChars(campoAno, 4);
+        JavaFXUI.setLimitChars(campoAno, 4);
 
         campoModelo = JavaFXUI.criarCampos("Modelo");
-        JavaFXUI.setlimitChars( campoModelo, 15 );
+        JavaFXUI.setLimitChars( campoModelo, 15 );
 
         campoChassi = JavaFXUI.criarCampos("Chassi");
-        JavaFXUI.setlimitChars( campoChassi, 17 );
+        JavaFXUI.setLimitChars( campoChassi, 17 );
 
         campoPlaca = JavaFXUI.criarCampos("Placa");
-        JavaFXUI.setlimitChars( campoPlaca, 7 );
+        JavaFXUI.setLimitChars( campoPlaca, 7 );
 
 
         botaoSalvar = new Button("Salvar");

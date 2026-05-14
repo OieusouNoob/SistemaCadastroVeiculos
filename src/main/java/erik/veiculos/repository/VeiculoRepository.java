@@ -65,7 +65,8 @@ public class VeiculoRepository {
 
         }catch( SQLException e) {
 
-            if( "23505".equals(e.getSQLState() ) ){
+            if( "23505".equals(e.getSQLState() ) ){ // 23505 é o código inteiro de retorno para a violação de constraint uniques
+                // Basicamente tentaram colocar um veículo com chassi ou placa duplicado no sistema
                 throw new IllegalArgumentException("Erro! Este veículo já foi cadastrado no sistema!");
             }
 
@@ -113,7 +114,7 @@ public class VeiculoRepository {
 
         } catch (SQLException e) {
             System.out.println("Error ao pesquisar os dados de um carro! " + e.getMessage());
-            return Collections.emptyList();
+            return Collections.emptyList(); // Se der errado, retornamos uma list vazia para o front
         }
     }
 

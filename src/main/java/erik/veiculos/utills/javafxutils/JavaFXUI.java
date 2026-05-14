@@ -76,7 +76,7 @@ public class JavaFXUI {
         return campo;
     }
 
-    public static void setlimitChars(TextField campo, int len) {
+    public static void setLimitChars(TextField campo, int len) {
 
         if (campo == null || len <= 0) {
             throw new IllegalArgumentException("Valores inválidos!");
