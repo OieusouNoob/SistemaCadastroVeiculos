@@ -212,8 +212,8 @@ public class Pesquisar  {
         ObservableList< Veiculo > dadosTable = FXCollections.observableArrayList( );
 
         tabelaVeiculo.setItems( dadosTable );
-
-        List<Veiculo> carTemp = VeiculoController.buscarTodos( 0 ); // Busca inicial para mostrar todos!
+        Pair< String, String > temp = caixaSuspensaFiltro.getValue();
+        List<Veiculo> carTemp = VeiculoController.buscarComFiltro( temp.getValue(), null, caixaSuspensaUnicoDono.getValue(), offSet );
 
         if( carTemp.isEmpty() ) {
 

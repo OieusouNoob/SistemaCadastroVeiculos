@@ -75,50 +75,7 @@ public class VeiculoRepository {
         }
     }
 
-    public static List<Veiculo> pesquisarGeral( Integer offSet ) {
-
-        try (Connection connection = ConexaoBancoDados.conexao()) {
-            PreparedStatement temp;
-
-            try{
-                temp = connection.prepareStatement(SEL);
-            } catch (SQLException e) {
-                throw new RuntimeException("Falha interna: Erro ao tentar montar pesquisa!");
-
-            }
-
-
-            temp.setInt(1, offSet);
-
-            List<Veiculo> car = new ArrayList<>();
-            try (ResultSet resultadoPesquisa = temp.executeQuery()) {
-
-                while (resultadoPesquisa.next()) {
-                    Veiculo tempCar = new Veiculo();
-                    tempCar.setId( resultadoPesquisa.getInt( "id" ) );
-                    tempCar.setNome( resultadoPesquisa.getString( "nome" ) );
-                    tempCar.setAno( resultadoPesquisa.getInt( "ano" ) );
-                    tempCar.setCor( resultadoPesquisa.getString( "cor" ) );
-                    tempCar.setModelo( resultadoPesquisa.getString( "modelo" ) );
-                    tempCar.setNumeroChassi( resultadoPesquisa.getString( "numero_chassi" ) );
-                    tempCar.setPlaca( resultadoPesquisa.getString( "placa" ));
-                    tempCar.setUnicoDono( resultadoPesquisa.getBoolean( "unicodono" ) );
-
-                    car.add(tempCar);
-
-                }
-
-            }
-
-            return car;
-
-        } catch (SQLException e) {
-            System.out.println("Error ao pesquisar os dados de um carro! " + e.getMessage());
-            return Collections.emptyList(); // Se der errado, retornamos uma list vazia para o front
-        }
-    }
-
-    public static List<Veiculo> pesquisarFiltro(String coluna, String valorDigitado, Utills.FiltroDono unicoDono, int offSet) {
+    public static List<Veiculo> pesquisar(String coluna, String valorDigitado, Utills.FiltroDono unicoDono, int offSet) {
         if (offSet < 0) {
             throw new RuntimeException("Pulo inválido!");
         }
