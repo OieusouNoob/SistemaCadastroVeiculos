@@ -41,5 +41,6 @@ build/
 ### ###
 src/main/resources/.env
 .idea
+.gitignore
 .class
 veiculo.txt
