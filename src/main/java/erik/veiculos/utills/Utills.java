@@ -55,7 +55,7 @@ public class Utills {
         return Toolkit.getDefaultToolkit().getScreenSize();
     } //Sei que não é a melhor forma, mas funciona
 
-    public static boolean salvarArquivo( Veiculo car ){
+    public static boolean salvarArquivo( Veiculo car ) throws java.io.IOException{
 
         if ( car == null ){
             throw new RuntimeException( "Erro! O carro não existe!" );
@@ -77,9 +77,8 @@ public class Utills {
             System.out.println("Arquivo salvo em: " + new java.io.File("veiculo.txt").getAbsolutePath());
 
             return true;
-        }catch( java.io.IOException e){
-            System.out.println("Error ao salvar o arquivo do veículo! ");
-            return false;
+        }catch( java.io.IOException e ){
+            throw new RuntimeException("Error ao salvar o arquivo do veículo! ");
         }
     }
 

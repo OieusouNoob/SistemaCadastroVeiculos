@@ -2,10 +2,11 @@ package erik.veiculos.repository;
 
 import erik.veiculos.models.Veiculo;
 import erik.veiculos.utills.Utills;
-
-import java.sql.*;
-
-import java.util.Collections;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -17,7 +18,6 @@ public class VeiculoRepository {
     }
 
     private final static String INS = "INSERT INTO veiculos ( nome, cor, ano, modelo, numero_chassi, placa, unicodono ) VALUES ( ?, ?, ?, ?, ?, ?, ? )";
-    private final static String SEL = "SELECT * FROM veiculos ORDER BY veiculos.id ASC LIMIT 15 OFFSET ?";
     private final static String UPT = "UPDATE veiculos SET nome = ?, cor = ?, ano = ?, modelo = ?, numero_chassi = ?, placa = ?, unicodono = ? WHERE id = ?";
     private final static String DEL = "DELETE FROM veiculos WHERE id = ?";
 

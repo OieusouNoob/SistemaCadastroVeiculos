@@ -4,6 +4,7 @@ import erik.veiculos.models.Veiculo;
 import erik.veiculos.repository.VeiculoRepository;
 import erik.veiculos.utills.Utills;
 
+import java.io.IOException;
 import java.util.List;
 
 public class VeiculoController {
@@ -34,25 +35,27 @@ public class VeiculoController {
         carro.setUnicoDono( unicoDono );
 
         boolean sucesso;
+        boolean saveSuccess = false;
 
         if( carroOriginal != null ){
             carro.setId( carroOriginal.getId() );
             sucesso = VeiculoRepository.update( carro );
+            saveSuccess = true;
         }else{
             try {
-                // Vou precisar puxar o ID do carro a parte, vou ter que alterar a assinatura de salvarArquivo
-
                 sucesso = VeiculoRepository.salvar( carro );
 
                 if ( sucesso ) {
 
-                    Utills.salvarArquivo( carro );
+                    saveSuccess = Utills.salvarArquivo( carro );
+
                 }
-            }catch( IllegalArgumentException e ){
+            }catch(IllegalArgumentException | IOException e ){
                 throw new RuntimeException( e.getMessage(), e );
             }
         }
-        return sucesso;
+        return sucesso && saveSuccess; // If return is true, ok! anything different is false!
+        // taking both results and return result finally!
     }
 
 
