@@ -6,7 +6,7 @@ import erik.veiculos.models.Veiculo;
 import erik.veiculos.utills.Utills;
 import erik.veiculos.utills.javafxutils.JavaFXUI;
 
-import erik.veiculos.view.options.Salvar;
+import erik.veiculos.view.options.TelaSalvar;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,7 +35,7 @@ import java.util.List;
 
 
 
-public class Pesquisar  {
+public class TelaPesquisar {
 
     private final TableColumn<Veiculo, Integer> colunaId = new TableColumn<>("Id");
     private final TableColumn<Veiculo, String> colunaNome = new TableColumn<>( "Nome" );
@@ -62,7 +62,7 @@ public class Pesquisar  {
     private int offSet = 0;
 
 
-    public Pesquisar(){
+    public TelaPesquisar(){
 
         colunaId.setCellValueFactory( new PropertyValueFactory<>( "id" ) );
         colunaNome.setCellValueFactory( new PropertyValueFactory<>( "nome" ) );
@@ -250,7 +250,7 @@ public class Pesquisar  {
 
         btnAlterar.setOnAction( alterar -> {
             Veiculo car = tabelaVeiculo.getSelectionModel().getSelectedItem();
-            telaPrincipal.setCenter( new Salvar().getFormularioSalvar( telaPrincipal, car ) );
+            telaPrincipal.setCenter( new TelaSalvar().getFormularioSalvar( telaPrincipal, car ) );
 
         });
 
@@ -276,7 +276,7 @@ public class Pesquisar  {
 
         btnSalvarNovo.setOnAction(salvar -> {
             try{
-                telaPrincipal.setCenter(  new Salvar().getFormularioSalvar( telaPrincipal, null ) );
+                telaPrincipal.setCenter(  new TelaSalvar().getFormularioSalvar( telaPrincipal, null ) );
                 offSet = 0;
                 // Começamos do 0 com o offSet para que todas vezes que atualizamos a tela, ela não de erros como
                 // botões ativos estando no limite já permitindo o utilizador clicar, não vai atualizar, mas vai mostrar que é possível clicar

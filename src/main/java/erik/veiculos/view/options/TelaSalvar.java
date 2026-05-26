@@ -4,7 +4,7 @@ import erik.veiculos.controller.VeiculoController;
 import erik.veiculos.models.Veiculo;
 import erik.veiculos.utills.javafxutils.JavaFXUI;
 
-import erik.veiculos.view.options.pesquisar.Pesquisar;
+import erik.veiculos.view.options.pesquisar.TelaPesquisar;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
@@ -18,7 +18,7 @@ import javafx.scene.layout.VBox;
 
 
 
-public class Salvar {
+public class TelaSalvar {
 
     private final TextField campoNome;
     private final TextField campoCor;
@@ -33,7 +33,7 @@ public class Salvar {
     private final CheckBox caixaSimNao;
 
 
-    public Salvar(){
+    public TelaSalvar(){
 
         campoNome = JavaFXUI.criarCampos("Nome");
         JavaFXUI.setLimitChars( campoNome, 15 );
@@ -75,7 +75,7 @@ public class Salvar {
         HBox buttons = new HBox( 30, botaoVoltar, botaoSalvar );
         buttons.setAlignment( Pos.BOTTOM_CENTER );
 
-        botaoSalvar.setOnAction(salvar -> {
+        botaoSalvar.setOnAction(_ -> {
 
             if ( JavaFXUI.AlertaVazio( campoNome, campoCor, campoAno, campoModelo, campoChassi, campoPlaca ) ){
                 return;
@@ -95,16 +95,14 @@ public class Salvar {
                 if( sucesso ){
                     JavaFXUI.Alertas( Alert.AlertType.INFORMATION, "Sucesso", "Dados salvos com sucesso!");
                 }
-            }catch( IllegalArgumentException e){
-                JavaFXUI.Alertas( Alert.AlertType.ERROR, "Aviso de validação", e.getMessage() );
             }catch( RuntimeException e){
                 JavaFXUI.Alertas( Alert.AlertType.ERROR, "Falha interna", e.getMessage() );
             }
 
         });
 
-        botaoVoltar.setOnAction( voltar -> {
-            new Pesquisar().telaPesquisar(telaPrincipal);
+        botaoVoltar.setOnAction(_ -> { // Ação do botão voltar
+            new TelaPesquisar().telaPesquisar( telaPrincipal );
         });
 
         if( car != null ){ // Atualizar os dados de um veículo

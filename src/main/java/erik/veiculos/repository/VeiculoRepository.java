@@ -55,7 +55,7 @@ public class VeiculoRepository {
                     throw new RuntimeException( "Falha ao encontrar o novo id do veículo!");
                 }
             } catch ( SQLException e){
-                throw  new RuntimeException( "Falha ao tentar puxar o id do veículo!" );
+                throw  new RuntimeException(e.getMessage(), e); // Captura da exceção na classe responsável pela conexão com o BD
 
             }
 

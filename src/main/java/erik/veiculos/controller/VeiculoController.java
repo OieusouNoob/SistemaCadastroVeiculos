@@ -37,25 +37,28 @@ public class VeiculoController {
         boolean sucesso;
         boolean saveSuccess = false;
 
-        if( carroOriginal != null ){
-            carro.setId( carroOriginal.getId() );
-            sucesso = VeiculoRepository.update( carro );
-            saveSuccess = true;
-        }else{
-            try {
-                sucesso = VeiculoRepository.salvar( carro );
-
-                if ( sucesso ) {
-
-                    saveSuccess = Utills.salvarArquivo( carro );
-
-                }
-            }catch(IllegalArgumentException | IOException e ){
-                throw new RuntimeException( e.getMessage(), e );
+        try {
+            if( carroOriginal != null ){ // Se carro é null, é para atualizar, apenas retornamos true
+                carro.setId( carroOriginal.getId() );
+                sucesso = VeiculoRepository.update( carro );
+                return sucesso; // Retornamos o resultado da atualização apenas.
             }
+            sucesso = VeiculoRepository.salvar( carro );
+
+            if ( sucesso ) {
+
+                saveSuccess = Utills.salvarArquivo( carro );
+
+            }
+
+            if ( !saveSuccess ) {
+                VeiculoRepository.delete( carro.getId() );
+            }
+        }catch( IOException | RuntimeException e ){ // IllegalArgumentException é uma sub-classe de RuntimeException - Todos edges cases com respostas!.
+            throw new RuntimeException( e.getMessage(), e );
         }
-        return sucesso && saveSuccess; // If return is true, ok! anything different is false!
-        // taking both results and return result finally!
+
+        return sucesso && saveSuccess; // Realizamos um teste lógico e retornamos o resultado desse teste lógico
     }
 
 
