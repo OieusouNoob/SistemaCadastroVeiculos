@@ -77,13 +77,5 @@ public class Veiculo {
         return unicoDono;
     }
 
-    @Override
-    public String toString(){
-        return "Veiculo {" +
-                "id = " + id +
-                ", nome = " +  nome + '\'' +
-                ", placa = " + placa + '\'' +
-                ", chassi = " + numeroChassi + '\''
-                + " }";
-    }
+
 }

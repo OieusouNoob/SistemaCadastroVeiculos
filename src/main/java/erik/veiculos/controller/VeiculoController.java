@@ -11,6 +11,9 @@ public class VeiculoController {
 
     public static boolean salvarOuAtualizar(Veiculo carroOriginal, String nome, String cor, String anoStr, String modelo, String chassi, String placa, boolean unicoDono )  {
         int anoParser;
+        if (nome == null || nome.trim().isEmpty() || cor == null || cor.trim().isEmpty() || modelo == null || modelo.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nenhum campo de texto pode ficar em branco!");
+        }
         try{
             anoParser = Integer.parseInt( anoStr );
         }catch( NumberFormatException nfe ){

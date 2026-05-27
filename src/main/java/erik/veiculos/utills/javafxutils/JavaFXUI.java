@@ -34,7 +34,7 @@ public class JavaFXUI {
     public static boolean AlertaVazio(TextField... campos) {
         for (TextField i : campos)
 
-            if (i.getText().isEmpty()) {
+            if (i.getText().trim().isEmpty()) {
 
                 Alertas(Alert.AlertType.ERROR, "Campos Vazios", "Digite algo nos campos!");
                 return true;
