@@ -1,7 +1,7 @@
 # SistemaCadastroVeiculos
 
 
-#Diagrama de Classes do Projeto
+# Diagrama de Classes do Projeto
 
 ```mermaid
 ---
@@ -83,4 +83,9 @@ classDiagram
     VeiculoController ..> VeiculoRepository : Delega persistência
     VeiculoController ..> Veiculo : Valida e Instancia
     VeiculoRepository ..> Veiculo : Preenche e Retorna
+<<<<<<< HEAD
 ```
+=======
+
+```
+>>>>>>> 45d70bed41a9ac9845786c9a61fb7a2da74ab03f
