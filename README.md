@@ -60,7 +60,7 @@ classDiagram
         }
     }
 
-    namespace salvar{
+    namespace view{
         class TelaSalvar{
             -TextField campoNome
             -TextField campoCor
@@ -83,5 +83,4 @@ classDiagram
     VeiculoController ..> VeiculoRepository : Delega persistência
     VeiculoController ..> Veiculo : Valida e Instancia
     VeiculoRepository ..> Veiculo : Preenche e Retorna
-
 ```
