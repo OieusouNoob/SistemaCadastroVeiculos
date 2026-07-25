@@ -1,1 +1,87 @@
 # SistemaCadastroVeiculos
+
+
+#Diagrama de Classes do Projeto
+
+```mermaid
+---
+config:
+  theme: dark
+---
+classDiagram
+    namespace models {
+        class Veiculo {
+            -int id
+            -String nome
+            -String cor
+            -int ano
+            -String modelo
+            -String numeroChassi
+            -String placa
+            -boolean unicoDono
+            +Veiculo()
+            +Veiculo(int, String, String, int, String, String, String, boolean)
+            +getters_setters()
+        }
+    }
+    namespace controller {
+        class VeiculoController {
+            -VeiculoController()
+            +salvarOuAtualizar(Veiculo, String, String, String, String, String, String, boolean)\$ boolean
+            +buscarComFiltro(String, String, FiltroDono, int) List~Veiculo~
+            +excluirVeiculo(int) boolean
+        }
+    }
+    namespace repository {
+        class VeiculoRepository {
+            -String INS
+            -String UPT
+            -String DEL
+            -VeiculoRepository()
+            +salvar(Veiculo) boolean
+            +pesquisar(String, String, FiltroDono, int) List~Veiculo~
+            +update(Veiculo) boolean
+            +delete(int) boolean
+        }
+    }
+    namespace view {
+        class TelaPrincipal {
+            +start(Stage stage) void
+        }
+        class TelaPesquisar {
+            -TableColumn colunaId
+            -TableColumn colunaNome
+            -TextField campoBusca
+            -Button btnBuscar
+            -int offSet
+            +TelaPesquisar()
+            +telaPesquisar(BorderPane) Pane
+            -atualizarTabela(ObservableList~Veiculo~) void
+        }
+    }
+
+    namespace salvar{
+        class TelaSalvar{
+            -TextField campoNome
+            -TextField campoCor
+            -TextField campoAno
+            -TextField campoModelo
+            -TextField campoChassi
+            -TextField campoPlaca
+            -Button botaoSalvar
+            -Button botaoVoltar
+            -CheckBox caixaSimNao
+            +TelaSalvar()
+            +Pane getFormularioSalvar(BorderPane, Veiculo)
+        }
+    }
+
+    TelaPrincipal ..> TelaPesquisar : Instancia e Inicia
+    TelaPesquisar ..> VeiculoController : Envia dados da UI
+    TelaPesquisar ..> TelaSalvar : Instancia Tela de salvamento
+    TelaPesquisar ..> Veiculo : Exibe na Tabela
+    VeiculoController ..> VeiculoRepository : Delega persistência
+    VeiculoController ..> Veiculo : Valida e Instancia
+    VeiculoRepository ..> Veiculo : Preenche e Retorna
+
+```

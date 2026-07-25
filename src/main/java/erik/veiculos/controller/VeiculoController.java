@@ -1,13 +1,17 @@
 package erik.veiculos.controller;
 
+import java.io.IOException;
+import java.util.List;
+
 import erik.veiculos.models.Veiculo;
 import erik.veiculos.repository.VeiculoRepository;
 import erik.veiculos.utills.Utills;
 
-import java.io.IOException;
-import java.util.List;
-
 public class VeiculoController {
+
+    private VeiculoController() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static boolean salvarOuAtualizar(Veiculo carroOriginal, String nome, String cor, String anoStr, String modelo, String chassi, String placa, boolean unicoDono )  {
         int anoParser;
@@ -61,15 +65,14 @@ public class VeiculoController {
             throw new RuntimeException( e.getMessage(), e );
         }
 
-        return sucesso && saveSuccess; // Realizamos um teste lógico e retornamos o resultado desse teste lógico
+        return sucesso && saveSuccess; // Realizamos um teste lógico para saber se foi preciso fazer um rollback ou não, 
+        // caso o arquivo não tenha sido salvo, deletamos o carro do banco de dados.
     }
-
-
 
     public static List<Veiculo> buscarComFiltro( String coluna, String valorDigitado, Utills.FiltroDono unicoDono, int offSet ){
         return VeiculoRepository.pesquisar( coluna, valorDigitado, unicoDono, offSet );
     }
-
+    
     public static boolean excluirVeiculo( int id  ){
         return VeiculoRepository.delete( id );
     }

@@ -101,7 +101,7 @@ public class TelaSalvar {
 
         });
 
-        botaoVoltar.setOnAction(_ -> { // Ação do botão voltar
+        botaoVoltar.setOnAction(a -> { // Ação do botão voltar
             new TelaPesquisar().telaPesquisar( telaPrincipal );
         });
 

@@ -1,37 +1,31 @@
 package erik.veiculos.view.options.pesquisar;
 
+import java.util.List;
+
 import erik.veiculos.controller.VeiculoController;
 import erik.veiculos.models.Veiculo;
-
 import erik.veiculos.utills.Utills;
 import erik.veiculos.utills.javafxutils.JavaFXUI;
-
 import erik.veiculos.view.options.TelaSalvar;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TableCell;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
-
-
-import java.util.List;
 
 
 
@@ -191,7 +185,8 @@ public class TelaPesquisar {
          * */
         VBox.setVgrow( tabelaVeiculo, Priority.ALWAYS ); // Corrigido o problema da tela pela metade
         // Esta linha acima faz um alinhamento em vertical segundo o dimensionamento da tela
-        tabelaVeiculo.getColumns().addAll(
+
+        tabelaVeiculo.getColumns().addAll(List.<TableColumn<Veiculo, ?>> of(
                 colunaId,
                 colunaNome,
                 colunaCor,
@@ -200,7 +195,7 @@ public class TelaPesquisar {
                 colunaChassi,
                 colunaPlaca,
                 colunaUnicoDono
-        );
+        ));
 
         tabelaVeiculo.setColumnResizePolicy( TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS );
 
@@ -213,6 +208,7 @@ public class TelaPesquisar {
 
         tabelaVeiculo.setItems( dadosTable );
         Pair< String, String > temp = caixaSuspensaFiltro.getValue();
+        
         List<Veiculo> carTemp = VeiculoController.buscarComFiltro( temp.getValue(), null, caixaSuspensaUnicoDono.getValue(), offSet );
 
         if( carTemp.isEmpty() ) {
