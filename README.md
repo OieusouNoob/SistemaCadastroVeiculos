@@ -10,7 +10,10 @@
     - PostgreSQL 18: Armazenamento de longa prazo
 
 
-# Diagrama de Classes do Projeto
+# Diagrama de Sequência
+
+
+# Diagrama de Classes 
 
 ```mermaid
 ---
