@@ -11,6 +11,43 @@
 
 
 # Diagrama de Sequência
+ # 1 - Criar Veículo
+    ```mermaid
+        ---
+        config:
+        theme: dark
+        ---
+        sequenceDiagram
+            autonumber
+            actor User
+            participant  Interface
+            participant  Controller
+            participant  DataBase
+            participant  Utills
+
+            User ->> Interface: Acessa a área de criar veículo
+
+            Interface -->> User: Devolve um formulário para preenchimento
+
+            User ->> Interface: Informa os dados no formulário e clica em 'Salvar'
+
+            Interface ->> Controller: Valida os dados
+            Controller ->> DataBase: Salva os dados
+            alt ArquivoSalvo
+                DataBase ->> DataBase: O arquivo foi salvo corretamente
+                DataBase ->> Utills: Salvar informações no .txt
+                DataBase -->> Controller: Confirma o salvamento
+                Controller -->> Interface: Exibe uma mensagem sobre o salvamento do arquivo
+            
+            else ArquivoNaoSalvo
+                DataBase ->> DataBase: O arquivo não foi salvo corretamente
+                DataBase ->> DataBase: Exclui os dados salvos e emite uma violação
+                DataBase -->> Controller: Capta a violação e envia para interface
+                Controller -->> Interface: Exibe uma mensagem amigável sobre a falha ao salvar os dados
+            end
+
+    
+    ```
 
 
 # Diagrama de Classes 
