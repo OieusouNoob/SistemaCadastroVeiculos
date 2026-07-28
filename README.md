@@ -13,10 +13,10 @@
 # Diagrama de Sequência
  # 1 - Criar Veículo
     ```mermaid
-        ---
-        config:
+    ---
+    config:
         theme: dark
-        ---
+    ---
         sequenceDiagram
             autonumber
             actor User
@@ -45,8 +45,6 @@
                 DataBase -->> Controller: Capta a violação e envia para interface
                 Controller -->> Interface: Exibe uma mensagem amigável sobre a falha ao salvar os dados
             end
-
-    
     ```
 
 
