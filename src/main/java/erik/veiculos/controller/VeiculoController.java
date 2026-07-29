@@ -45,10 +45,13 @@ public class VeiculoController {
         boolean saveSuccess = false;
 
         try {
-            if( carroOriginal != null ){ // Se carro é null, é para atualizar, apenas retornamos true
+            if( carroOriginal != null ){ // Se carro não é null, é para atualizar, apenas retornamos true
                 carro.setId( carroOriginal.getId() );
                 sucesso = VeiculoRepository.update( carro );
-                return sucesso; // Retornamos o resultado da atualização apenas.
+                if( !sucesso ) {
+                    throw new RuntimeException( "Falha ao atualizar o veículo!" );
+                }
+                return sucesso;
             }
             sucesso = VeiculoRepository.salvar( carro );
 
@@ -60,7 +63,9 @@ public class VeiculoController {
 
             if ( !saveSuccess ) {
                 VeiculoRepository.delete( carro.getId() );
+                throw new RuntimeException( "Falha ao salvar o arquivo do veículo, essa operação cancelada!" );
             }
+        // A linha abaixo é uma soma de exceções que podem ser lançadas. 
         }catch( IOException | RuntimeException e ){ // IllegalArgumentException é uma sub-classe de RuntimeException - Todos edges cases com respostas!.
             throw new RuntimeException( e.getMessage(), e );
         }

@@ -32,17 +32,24 @@ sequenceDiagram
     Interface -->> User: Devolve um formulário para preenchimento
     User ->> Interface: Informa os dados no formulário e clica em 'Salvar'
     Interface ->> Controller: Valida os dados
-    Controller ->> DataBase: Salva os dados e verifica se foi salvo corretamente
+    Controller ->> DataBase: Salva os dados
+    DataBase -->> DataBase: Informa se os dados do veículo foram salvos no Banco de Dados
 
-    alt ArquivoSalvo
-        DataBase ->> Utills: Salva informações no arquivo .txt
-        DataBase -->> Controller: Confirma o salvamento
-        Controller -->> Interface: Exibe uma mensagem sobre o salvamento do arquivo
-    
-    else ArquivoNaoSalvo
-        DataBase ->> DataBase: Exclui os dados salvos e emite uma violação
-        DataBase -->> Controller: Capta a violação e envia para interface
-        Controller -->> Interface: Exibe uma mensagem amigável sobre a falha ao salvar os dados
+    alt VeiculoSalvo
+        Controller ->> Utills: Salva os dados em um arquivo .txt
+        Utills -->> Controller: Informa se o veículo foi salvo no arquivo .txt
+
+        alt VeiculoSalvoArquivo
+            Controller -->> Interface: Retorna um sucesso
+            Interface -->> User: Exibe uma mensagem de sucesso
+        else
+            Controller -->> Interface: Retorna uma falha
+            Interface -->> User: Exibe uma mensagem de falha
+
+    else VeiculoNaoSalvo
+        Controller ->> DataBase: Executa a exclusão do veículo recém criado ( ROLLBACK MANUAL ) e instância uma exceção
+        Controller -->> Interface: Lança uma exceção
+        Interface -->> User: Exibe uma mensagem de 
     end
 ```
 
@@ -57,29 +64,29 @@ sequenceDiagram
 
     actor User
 
-    participant  Interface
-    participant  Controller
-    participant  DataBase
+    participant Interface
+    participant Controller
+    participant DataBase
 
-    User ->> Interface: Seleciona o veículo desejado e clica em 'Editar'
+    User ->> Interface: Seleciona o veículo desejado e clica em 'Alterar'
 
-    Interface -->> User: Devolve um formulário preenchido com as informações do veículo
+    Interface -->> User: Devolve um formulário preenchido com as informações do veículo selecionado
 
-    User ->> Interface: Insere os novos dados
-    Interface ->> Controller: Valida os dados
-    Controller ->> DataBase: Atualiza os dados
-    DataBase ->> DataBase: Atualiza e verifica se a atualização ocorreu corretamente
+    User ->> Interface: Insere os novos dados e clica em 'Salvar'
 
-    alt ArquivoAtualizado
+    Interface ->> Controller: Valida os dados do veículo
 
-        DataBase -->> Controller: Confirma a atualização
-        Controller -->> Interface: Exibe uma mensagem sobre a atualização das informações do veículo
-    
-    else ArquivoNaoAtualizado
-        
-        DataBase ->> DataBase: Exclui os dados atualizados e emite uma violação
-        DataBase -->> Controller: Capta a violação e envia para interface
-        Controller -->> Interface: Exibe uma mensagem amigável sobre a falha ao atualizar os dados
+    Controller ->> DataBase: Obtém o 'ID' do veículo da instância original e atualiza os dados
+
+    DataBase -->> Controller: Retorna a informação da atualização das informações do veículo
+
+    alt VeiculoAtualizado
+        Controller -->> Interface: Retorna um sucesso
+        Interface -->> User: Exibe uma mensagem de sucesso 
+
+    else VeiculoNaoAtualizado
+        Controller -->> Interface: Retorna uma falha
+        Interface -->> User: Exibe uma mensagem de falha
     end
 
 ```
