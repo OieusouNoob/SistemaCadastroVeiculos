@@ -33,7 +33,7 @@ sequenceDiagram
     User ->> Interface: Informa os dados no formulário e clica em 'Salvar'
     Interface ->> Controller: Valida os dados
     Controller ->> DataBase: Salva os dados
-    DataBase -->> DataBase: Informa se os dados do veículo foram salvos no Banco de Dados
+  
 
     alt VeiculoSalvo
         Controller ->> Utills: Salva os dados em um arquivo .txt
