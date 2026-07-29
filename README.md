@@ -36,6 +36,7 @@ sequenceDiagram
   
 
     alt VeiculoSalvo
+        DataBase -->> Controller: Retorna um sucesso ao salvar o veículo
         Controller ->> Utills: Salva os dados em um arquivo .txt
         Utills -->> Controller: Informa se o veículo foi salvo no arquivo .txt
 
@@ -47,6 +48,7 @@ sequenceDiagram
             Interface -->> User: Exibe uma mensagem de falha
         end
     else VeiculoNaoSalvo
+        DataBase -->> Controller: Retorna uma falha ao salvar o veículo 
         Controller ->> DataBase: Executa a exclusão do veículo recém criado ( ROLLBACK MANUAL ) e instância uma exceção
         Controller -->> Interface: Lança uma exceção
         Interface -->> User: Exibe uma mensagem de 
