@@ -51,7 +51,7 @@ sequenceDiagram
         DataBase -->> Controller: Retorna uma falha ao salvar o veículo 
         Controller ->> DataBase: Executa a exclusão do veículo recém criado ( ROLLBACK MANUAL ) e instância uma exceção
         Controller -->> Interface: Lança uma exceção
-        Interface -->> User: Exibe uma mensagem de 
+        Interface -->> User: Exibe uma mensagem de falha
 
     end
 ```
