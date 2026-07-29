@@ -45,11 +45,12 @@ sequenceDiagram
         else
             Controller -->> Interface: Retorna uma falha
             Interface -->> User: Exibe uma mensagem de falha
-
+        end
     else VeiculoNaoSalvo
         Controller ->> DataBase: Executa a exclusão do veículo recém criado ( ROLLBACK MANUAL ) e instância uma exceção
         Controller -->> Interface: Lança uma exceção
         Interface -->> User: Exibe uma mensagem de 
+
     end
 ```
 
