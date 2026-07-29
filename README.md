@@ -81,7 +81,7 @@ sequenceDiagram
 
     Controller ->> DataBase: Obtém o 'ID' do veículo da instância original e atualiza os dados
 
-    DataBase -->> Controller: Retorna a informação da atualização das informações do veículo
+    DataBase -->> Controller: Retorna uma informação sobre a atualização( Sucesso ou Falha )
 
     alt VeiculoAtualizado
         Controller -->> Interface: Retorna um sucesso
