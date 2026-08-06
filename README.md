@@ -64,32 +64,6 @@ Impede a entrada de valores que não são baseados no formato tradicional do Mer
 ```
 
 
-### REGEX utilizados
-    > Para Chassi:
-    `   
-        if( chassi.length() < 17){
-            throw new RuntimeException( "Tamanho inválido! Digite um tamanho de chassi corretamente! ");
-        }
-
-        // Pela minha experiência diária no setor automativo
-        // E pelo que li em um forúm
-        // Não é sempre permitido = acho que nem é - chassis iniciarem com 0
-        String t1 = "^[A-HJ-NPR-Z0-9]{17}$";
-        String t2 = chassi.toUpperCase();
-        return t2.matches(t1);
-    `
-    > Para Placa:
-    `
-        if( placa.length() < 7 ){
-            throw new RuntimeException( "Tamanho inválido! Digite um tamanho de placa corretamente!" );
-        }
-        
-        String t1 = "^[A-Z]{3}[0-9]([A-Z]|[0-9])[0-9]{2}$";
-        String t2 = placa.toUpperCase();
-        return t2.matches(t1);
-    `
-
-
 # 🔄 Diagramas de Sequência
 
  # 1 - Criar Veículo
