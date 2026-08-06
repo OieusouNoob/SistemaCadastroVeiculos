@@ -1,8 +1,9 @@
 package erik.veiculos.utills;
 
-import erik.veiculos.models.Veiculo;
-import java.awt.Toolkit;
 import java.awt.Dimension;
+import java.awt.Toolkit;
+
+import erik.veiculos.models.Veiculo;
 
 
 
@@ -21,34 +22,24 @@ public class Utills {
 
 
     public static boolean ehChassi(String chassi){
-        if (chassi == null) {
-            throw new IllegalArgumentException("Digite algo!");
-        }
-
-        if( chassi.length() < 17){
-            throw new RuntimeException( "Tamanho inválido! Digite um tamanho de chassi corretamente! ");
+        if (chassi == null || chassi.length() < 17) {
+            throw new IllegalArgumentException("Tamanho inválido! Digite um tamanho de chassi corretamente. ");
         }
 
         //Pela minha experiência diária no setor automativo
         // E pelo que li em um forúm
         // Não é sempre permitido = acho que nem é - chassis iniciarem com 0
-        String t1 = "^[A-HJ-NPR-Z0-9]{17}$";
-        String t2 = chassi.toUpperCase();
-        return t2.matches(t1);
+        String regexChassi = "^[A-HJ-NPR-Z0-9]{17}$";
+        return chassi.toUpperCase().matches(regexChassi);
     }
 
     public static boolean ehPlaca(String placa) {
-        if (placa == null) {
-            throw new IllegalArgumentException("Digite algo!");
+        if (placa == null || placa.length() < 7) {
+            throw new IllegalArgumentException("Tamanho inválido! Uma placa deve ter 7 caracteres. ");
         }
 
-        if( placa.length() < 7 ){
-            throw new RuntimeException( "Tamanho inválido! Digite um tamanho de placa corretamente!" );
-        }
-        String t1 = "^[A-Z]{3}[0-9]([A-Z]|[0-9])[0-9]{2}$";
-        String t2 = placa.toUpperCase();
-
-        return t2.matches(t1);
+        String regexPlaca = "^[A-Z]{3}[0-9]([A-Z]|[0-9])[0-9]{2}$";
+        return placa.toUpperCase().matches( regexPlaca );
     }
 
     public static Dimension sizeScreen() {

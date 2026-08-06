@@ -21,7 +21,7 @@ public class VeiculoController {
         try{
             anoParser = Integer.parseInt( anoStr );
         }catch( NumberFormatException nfe ){
-            throw new IllegalArgumentException( "Digite um ano corretamente!" + nfe.getMessage() );
+            throw new IllegalArgumentException( "Digite um ano válido!" + nfe.getMessage() );
         }
 
         if( !Utills.ehChassi( chassi ) ){
