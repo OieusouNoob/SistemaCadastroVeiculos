@@ -93,7 +93,40 @@ sequenceDiagram
     end
 
 ```
+# 3 - Excluir Veículo
+```mermaid
+---
+config: 
+    theme:dark
+---
 
+sequenceDiagram
+    autonumber
+    actor User
+
+    participant Interface
+    participant Controller
+    participant DataBase
+
+    User ->> Interface: Seleciona uma linha e clica em 'Excluir'
+    Interface -->> User: Exibe um pop-up de confirmação pedindo a confirmação da exclusão
+    User -->> Interface: Confirma a exclusão do veículo
+
+    Interface ->> Controller: Recebe e envia o ID do veículo para o DataBase
+    Controller ->> DataBase: Envia o ID para o DataBase
+    alt EsseIdExiste
+        DataBase ->> DataBase: Exclui o ID
+        DataBase -->> Controller: Retorna True
+        Controller -->> Interface: Captura o retorno
+        Interface -->> User: Exibe uma mensagem sobre o sucesso da exclusão do veículo
+
+    else IdNaoExiste
+        DataBase ->> DataBase: Lança uma exceção
+        DataBase ->> Controller: Retorna a exceção para a interface
+        Controller ->> Interface: Captura a exceção
+        Interface ->> User: Lança uma mensagem sobre uma falha ao tentar excluir o veículo
+    end
+```
 
 # Diagrama de Classes 
 
