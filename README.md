@@ -298,6 +298,11 @@ classDiagram
         mvn javafx:run
     ```
 
+# Notas Importantes:
+ 
+Este projeto foi realizado para uma atividade da minha faculdade. Então, algumas coisas como salvar arquivo .txt, um dos pedidos da atividade, foram feitos para atender essa necessidade específica. Este README é apenas um enfeita sobre uma atividade, que virou um portfólio inicial meu.
+Senti a necessidade de escrever esta nota devido ao quão discrepante este projeto pode parecer do mercado em alguns decisões. Dito isto, espero que encontre o que procura.
+
 ## ✒️ Autor
 
 Desenvolvido por **Erik Teixeira**.
