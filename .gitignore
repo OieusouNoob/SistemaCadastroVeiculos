@@ -38,9 +38,14 @@ build/
 ### Mac OS ###
 .DS_Store
 
-### ###
+    
 src/main/resources/.env
-.idea
-.gitignore
-.class
 veiculo.txt
+dependency-reduced-pom.xml
+.classpath
+.project
+.settings/
+.idea/
+*.iml
+.vscode/
+target/

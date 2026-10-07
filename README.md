@@ -34,33 +34,32 @@ if (nome == null || nome.trim().isEmpty() ||
 Impede a entrada de valores alpha númericos ou letras no campo de ano.
 
 ```java
-    try{
-            anoParser = Integer.parseInt( anoStr );
-        }catch( NumberFormatException nfe ){
-            throw new IllegalArgumentException( "Digite um ano válido!" + nfe.getMessage() );
-        }
+try {
+    anoParser = Integer.parseInt(anoStr);
+} catch (NumberFormatException nfe) {
+    throw new IllegalArgumentException("Digite um ano válido!");
+}
 ```
 ### 3. Validação do Chassi
-Impede a entrada de valores que não são baseados na norma ISO 3779( Excluindo as letras `I`, `O` e `Q` para evitar confusão com 1 e 0 ).
+Impede a entrada de valores que não são baseados na norma ISO 3779( Excluindo as letras `I`, `O` e `Q` para evitar confusão ).
 
 ```java
-    if (chassi == null || chassi.length() < 17) {
-            throw new IllegalArgumentException("Tamanho inválido! Digite um tamanho de chassi corretamente. ");
-    }
+if (chassi == null || chassi.length() < 17) {
+    throw new IllegalArgumentException("Tamanho inválido! Digite um tamanho de chassi corretamente.");
+}
 
-    String regexChassi = "^[A-HJ-NPR-Z0-9]{17}$";
-    return chassi.toUpperCase().matches(regexChassi);
-    
+String regexChassi = "^[A-HJ-NPR-Z0-9]{17}$";
+return chassi.toUpperCase().matches(regexChassi);
 ```
 ### 4. Validação da Placa
 Impede a entrada de valores que não são baseados no formato tradicional do MercoSul ( `AAA1234` ou `AAA1A23` ).
 ```java
-     if (placa == null || placa.length() < 7) {
-            throw new IllegalArgumentException("Tamanho inválido! Uma placa deve ter 7 caracteres. ");
-    }
+if (placa == null || placa.length() < 7) {
+    throw new IllegalArgumentException("Tamanho inválido! Uma placa deve ter 7 caracteres.");
+}
 
-    String regexPlaca = "^[A-Z]{3}[0-9]([A-Z]|[0-9])[0-9]{2}$";
-    return placa.toUpperCase().matches( regexPlaca );
+String regexPlaca = "^[A-Z]{3}[0-9]([A-Z]|[0-9])[0-9]{2}$";
+return placa.toUpperCase().matches(regexPlaca);
 ```
 
 
@@ -274,3 +273,34 @@ classDiagram
     VeiculoRepository ..> Veiculo : Preenche e Retorna
 
 ```
+
+## 🚀 Como Executar o Projeto
+
+### Pré-requisitos
+* Java JDK 25 instalado
+* Maven 3.8+ instalado
+* PostgreSQL 18 rodando localmente (ou via Docker)
+
+### Passo a Passo
+
+1. **Clonar o repositório:**
+   ```bash
+    git clone https://github.com/OieusouNoob/SistemaCadastroVeiculos.git
+    cd SistemaCadastroVeiculos
+   ```
+2. **Configurar Banco de Dados:**
+    * Crie o banco de dados PostgreSQL e execute o script contido em src/main/resources/schema.sql
+    - Para casos de alterações de atributos de veículos, será necessário alterações no código e na tabela exibida
+
+3. **Compilar e Executar:**
+    ```bash
+        mvn clean install
+        mvn javafx:run
+    ```
+
+## ✒️ Autor
+
+Desenvolvido por **Erik Teixeira**.
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/erik-teixeira-093357308/)
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/OieusouNoob)
